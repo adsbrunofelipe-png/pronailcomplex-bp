@@ -1,0 +1,51 @@
+import { useEffect, useState } from "react";
+
+/**
+ * Design Philosophy: Minimalist & Functional
+ * - Clean, centered layout with maximum focus on the clock
+ * - Large, readable digital display
+ * - Subtle animations for visual interest
+ * - Dark background for reduced eye strain
+ */
+
+export default function Home() {
+  const [time, setTime] = useState<string>("");
+
+  useEffect(() => {
+    // Set initial time
+    const updateTime = () => {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const seconds = String(now.getSeconds()).padStart(2, "0");
+      setTime(`${hours}:${minutes}:${seconds}`);
+    };
+
+    updateTime();
+
+    // Update time every second
+    const interval = setInterval(updateTime, 1000);
+
+    // Disable right-click context menu
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
+    document.addEventListener("contextmenu", handleContextMenu);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("contextmenu", handleContextMenu);
+    };
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="text-center">
+        <div className="text-9xl font-bold text-foreground tracking-tighter font-mono">
+          {time || "00:00:00"}
+        </div>
+      </div>
+    </div>
+  );
+}
