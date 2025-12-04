@@ -1,51 +1,60 @@
-import { useEffect, useState } from "react";
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relógio Digital</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/**
- * Design Philosophy: Minimalist & Functional
- * - Clean, centered layout with maximum focus on the clock
- * - Large, readable digital display
- * - Subtle animations for visual interest
- * - Dark background for reduced eye strain
- */
+        body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+        }
 
-export default function Home() {
-  const [time, setTime] = useState<string>("");
+        .clock {
+            font-size: 120px;
+            font-weight: bold;
+            color: #000000;
+            letter-spacing: 10px;
+            text-align: center;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock" id="clock">00:00:00</div>
 
-  useEffect(() => {
-    // Set initial time
-    const updateTime = () => {
-      const now = new Date();
-      const hours = String(now.getHours()).padStart(2, "0");
-      const minutes = String(now.getMinutes()).padStart(2, "0");
-      const seconds = String(now.getSeconds()).padStart(2, "0");
-      setTime(`${hours}:${minutes}:${seconds}`);
-    };
+    <script>
+        // Função para atualizar o relógio
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+        }
 
-    updateTime();
+        // Atualizar relógio a cada segundo
+        setInterval(updateClock, 1000);
 
-    // Update time every second
-    const interval = setInterval(updateTime, 1000);
+        // Atualizar imediatamente ao carregar
+        updateClock();
 
-    // Disable right-click context menu
-    const handleContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-    };
-
-    document.addEventListener("contextmenu", handleContextMenu);
-
-    return () => {
-      clearInterval(interval);
-      document.removeEventListener("contextmenu", handleContextMenu);
-    };
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <div className="text-center">
-        <div className="text-9xl font-bold text-foreground tracking-tighter font-mono">
-          {time || "00:00:00"}
-        </div>
-      </div>
-    </div>
-  );
-}
+        // Desabilitar clique do botão direito
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
